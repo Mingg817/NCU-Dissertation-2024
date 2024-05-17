@@ -1,0 +1,12 @@
+pandas
+tushare
+torch
+torchvision
+transformers
+datasets
+accelerate
+retry
+d2l==1.0.3
+DrissionPage
+torchsummary
+seaborn
