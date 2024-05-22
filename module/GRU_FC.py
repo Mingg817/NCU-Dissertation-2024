@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
+"""
 @File    :   gru_fc.py
-@Time    :   2024/05/17
-@Author  :   LI YIMING 
+@Time    :   2024/05/20
+@Author  :   LI YIMING
 @Version :   1.0
 @Site    :   https://github.com/Mingg817
 @Desc    :   GRU-FC模型
-'''
-
+"""
 
 import torch
 from torch import nn
@@ -20,7 +19,10 @@ class GRU_FC(nn.Module):
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         self.gru = nn.GRU(
-            input_size=1, hidden_size=hidden_size, num_layers=num_layers, batch_first=True
+            input_size=1,
+            hidden_size=hidden_size,
+            num_layers=num_layers,
+            batch_first=True,
         )
         self.fc = nn.Linear(hidden_size, 1)
 
@@ -32,7 +34,9 @@ class GRU_FC(nn.Module):
                 nn.init.zeros_(param)
 
     def init_hidden(self, batch_size):
-        return (torch.rand(self.num_layers, batch_size, self.hidden_size) * 0.01).to("cuda")
+        return (torch.rand(self.num_layers, batch_size, self.hidden_size) * 0.01).to(
+            "cuda"
+        )
 
     def forcast(self, x, h0, forcast_length):
         forcast_out = torch.zeros(x.shape[0], forcast_length).to("cuda")

@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+@File    :   NLDG.py
+@Time    :   2024/05/20
+@Author  :   LI YIMING
+@Version :   1.0
+@Site    :   https://github.com/Mingg817
+@Desc    :   News-Llama3-DistilBERT-GRU(NLDG)模型
+"""
+
 from torch import nn
 import torch
 
@@ -13,7 +24,10 @@ class NLDG(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
         self.gru = nn.GRU(
-            input_size=1 + fcA_dim, hidden_size=hidden_size, num_layers=num_layers, batch_first=True
+            input_size=1 + fcA_dim,
+            hidden_size=hidden_size,
+            num_layers=num_layers,
+            batch_first=True,
         )
 
         self.fcB = nn.Linear(hidden_size, 1)
@@ -25,7 +39,9 @@ class NLDG(nn.Module):
                 nn.init.zeros_(param)
 
     def init_hidden(self, batch_size, device="cuda"):
-        return (torch.rand(self.num_layers, batch_size, self.hidden_size) * 0.01).to(device)
+        return (torch.rand(self.num_layers, batch_size, self.hidden_size) * 0.01).to(
+            device
+        )
 
     def forward(self, x, x_news, h0):
         # x -> [batch_size, seq_len]

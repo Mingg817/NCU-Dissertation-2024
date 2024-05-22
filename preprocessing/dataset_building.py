@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+@File    :   dataset_building.py
+@Time    :   2024/05/20
+@Author  :   LI YIMING
+@Version :   1.0
+@Site    :   https://github.com/Mingg817
+@Desc    :   数据集构建
+"""
+
 # 导入tushare
 import tushare as ts
 import pandas as pd
@@ -18,11 +29,15 @@ skip_step = 3
 
 @cache
 def get_berted_news(date: str):
-    return json.loads(con.execute(f"SELECT berted FROM news WHERE date='{date}'").fetchone()[0])
+    return json.loads(
+        con.execute(f"SELECT berted FROM news WHERE date='{date}'").fetchone()[0]
+    )
 
 
 def stock2parquet(ts_code: str, start_date: str, end_date: str, train: bool):
-    df = ts.pro_bar(ts_code=ts_code, adj="hfq", start_date=start_date, end_date=end_date)
+    df = ts.pro_bar(
+        ts_code=ts_code, adj="hfq", start_date=start_date, end_date=end_date
+    )
     # 判断数据是否为空
     assert len(df) > 0, "数据为空"
     # 按日期排序
@@ -40,7 +55,12 @@ def stock2parquet(ts_code: str, start_date: str, end_date: str, train: bool):
     for i in range(0, len(df) - window_size - y_size, skip_step):
         start_date.append(df["trade_date"].iloc[i].date().strftime("%Y-%m-%d"))
         # 精度控制在float16
-        x.append(df["close_norm"].iloc[i : i + window_size].values.astype(np.float16).tolist())
+        x.append(
+            df["close_norm"]
+            .iloc[i : i + window_size]
+            .values.astype(np.float16)
+            .tolist()
+        )
         y.append(
             df["close_norm"]
             .iloc[i + window_size : i + window_size + y_size]
@@ -49,7 +69,10 @@ def stock2parquet(ts_code: str, start_date: str, end_date: str, train: bool):
         )
         # 构建y_avg方便后续计算损失
         y_avg.append(
-            df["close_norm"].iloc[i + window_size : i + window_size + y_size].mean().tolist()
+            df["close_norm"]
+            .iloc[i + window_size : i + window_size + y_size]
+            .mean()
+            .tolist()
         )
         # 从数据库获取新闻数据
         news_line = []

@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+@File    :   NLDG_data_handle.py
+@Time    :   2024/05/20
+@Author  :   LI YIMING
+@Version :   1.0
+@Site    :   https://github.com/Mingg817
+@Desc    :   处理新闻数据   
+"""
+
 import sqlite3
 from typing import Tuple
 from retry import retry
@@ -62,8 +73,8 @@ def news_handel(model, d_news: Tuple[str, str]):
 if __name__ == "__main__":
     # 利用数据库存储数据
     con = sqlite3.connect("news.db")
-    
-    #加载模型
+
+    # 加载模型
     LLM_model_id = "shenzhi-wang/Llama3-8B-Chinese-Chat"
     LLM_tokenizer = AutoTokenizer.from_pretrained(LLM_model_id)
     LLM_model = AutoModelForCausalLM.from_pretrained(
@@ -87,7 +98,10 @@ if __name__ == "__main__":
 
         insert_data(
             con,
-            (name.date(), news_handel(LLM_model, group[["title", "main_text"]].values.tolist())),
+            (
+                name.date(),
+                news_handel(LLM_model, group[["title", "main_text"]].values.tolist()),
+            ),
         )
         print(f"日期: {name.date()} 插入成功")
 
@@ -98,7 +112,9 @@ if __name__ == "__main__":
         d_news = con.execute(f"SELECT text FROM news WHERE date='{date}'").fetchone()[0]
         sentiment = (
             BERT_model(
-                BERT_tokenizer.encode(d_news, return_tensors="pt", max_length=512, truncation=True)
+                BERT_tokenizer.encode(
+                    d_news, return_tensors="pt", max_length=512, truncation=True
+                )
             )
             .last_hidden_state[0, 0, :]
             .tolist()
