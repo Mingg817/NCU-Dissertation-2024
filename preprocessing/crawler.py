@@ -19,7 +19,7 @@ logging.basicConfig(format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(leve
 
 import sqlite3
 
-con = sqlite3.connect("news.db")
+con = sqlite3.connect("../dataset/601998_news.db")
 
 # 创建页面对象
 from DrissionPage import WebPage
@@ -89,4 +89,3 @@ for p in path:
     handel_main_page(p)
     page.wait(1, 2)
 
-# handel_sub_page("https://guba.eastmoney.com/news,601988,1422679952.html")

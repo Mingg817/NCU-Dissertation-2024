@@ -109,7 +109,7 @@ def stock2parquet(ts_code: str, start_date: str, end_date: str, train: bool):
             "window_size": [window_size] * len(start_date),
         }
     )
-    ds.to_parquet(f"./spdataset/{ts_code}_{'train' if train else 'test'}_news.parquet")
+    ds.to_parquet(f"../dataset/{ts_code}_{'train' if train else 'test'}_news.parquet")
 
 
 if __name__ == "__main__":

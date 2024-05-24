@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
     # 读取数据,不使用SQL语句,直接使用pandas
     # 原始数据
-    data = pd.read_csv("601998_news.csv")
+    data = pd.read_csv("../601998_news.csv")
     grouped = data.groupby(pd.Grouper(key="time", freq="D"))
     # 利用llm模型处理新闻
     for name, group in grouped:

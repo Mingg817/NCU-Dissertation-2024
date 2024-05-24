@@ -177,12 +177,6 @@ def NLDG_trainer(
                 x = batch["y_hat"][:, i].unsqueeze(dim=-1)
                 # x -> [batch_size, 1]
                 x_news = batch["y_news"][:, i, :].unsqueeze(dim=1)
-            
-            # for i in range(forcast_length):
-            #     o, h = model(x, x_news, h)
-            #     output[:, i] = o
-            #     x = o.unsqueeze(dim=-1)
-            #     x_news = batch["y_news"][:, i, :].unsqueeze(dim=1)
 
             output = torch.mean(output, dim=1)
 
